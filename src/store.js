@@ -27,6 +27,7 @@ export function getEntries() {
     cacheValid = true;
     return cache;
   } catch {
+    localStorage.removeItem(STORAGE_KEY);
     cache = [];
     cacheValid = true;
     return cache;

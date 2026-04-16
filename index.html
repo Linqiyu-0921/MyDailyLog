@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="每日成长日志 - 个人每日复盘与成长记录工具" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:;" />
+    <title>每日成长日志</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo" data-action="navigate" data-page="dashboard">
+          <div class="logo-mark">記</div>
+          <span class="logo-text">成长日志</span>
+        </div>
+        <nav class="nav-group" id="navGroup">
+          <button class="nav-link active" data-page="dashboard">概览</button>
+          <button class="nav-link" data-page="write">写日志</button>
+          <button class="nav-link" data-page="history">历史</button>
+          <button class="nav-link" data-page="archive">归档</button>
+          <button class="nav-link" data-page="export">导出</button>
+        </nav>
+        <div class="header-right">
+          <button class="theme-toggle" id="themeToggle" title="切换主题">☀️</button>
+          <button class="btn-write" data-action="navigate" data-page="write">
+            <span>+</span><span class="btn-write-text">写日志</span>
+          </button>
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page active" id="page-dashboard">
+        <div class="hero">
+          <h1 class="hero-greeting" id="greetingText"></h1>
+          <p class="hero-sub" id="greetingSub"></p>
+          <div id="streakBadge"></div>
+        </div>
+        <div class="stats-row" id="statsGrid"></div>
+        <div class="section-head">
+          <h2 class="section-title">最近记录</h2>
+          <a href="#" class="section-link" data-action="navigate" data-page="history">查看全部</a>
+        </div>
+        <div class="entries-list" id="recentEntries"></div>
+      </div>
+
+      <div class="page" id="page-write">
+        <div class="write-container">
+          <div class="write-header">
+            <h1 class="write-title" id="writeTitle">今天的复盘</h1>
+            <p class="write-subtitle">记录成长，遇见更好的自己</p>
+          </div>
+          <form id="journalForm">
+            <input type="hidden" id="editId" value="" />
+            <div class="form-group">
+              <label class="form-label">日期</label>
+              <div class="date-nav">
+                <button type="button" class="date-nav-btn" data-action="shift-date" data-delta="-1">◀</button>
+                <input type="date" class="form-date" id="entryDate" />
+                <button type="button" class="date-nav-btn" data-action="shift-date" data-delta="1">▶</button>
+              </div>
+            </div>
+            <hr class="form-divider" />
+            <div class="form-group">
+              <label class="form-label">快乐的事 <span class="form-label-hint">让你嘴角上扬的瞬间</span></label>
+              <textarea class="form-textarea" id="entryHappy" placeholder="记录下让你嘴角上扬的瞬间..." maxlength="500"></textarea>
+              <div class="char-count"><span id="happyCount">0</span> / 500</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">充实的事 <span class="form-label-hint">完成的任务、学到的新知</span></label>
+              <textarea class="form-textarea" id="entryFulfilling" placeholder="完成了什么任务？学到了什么新知？" maxlength="500"></textarea>
+              <div class="char-count"><span id="fulfillingCount">0</span> / 500</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">应该改进的事 <span class="form-label-hint">哪里可以做得更好</span></label>
+              <textarea class="form-textarea" id="entryImprove" placeholder="哪里可以做得更好？" maxlength="500"></textarea>
+              <div class="char-count"><span id="improveCount">0</span> / 500</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">今日反思 <span class="form-label-hint">对生活、工作的深度思考</span></label>
+              <textarea class="form-textarea" id="entryReflection" placeholder="对生活、工作的深度思考..." maxlength="500"></textarea>
+              <div class="char-count"><span id="reflectionCount">0</span> / 500</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">感恩的人 <span class="form-label-hint">谁帮助了你</span></label>
+              <textarea class="form-textarea" id="entryGrateful" placeholder="谁帮助了你？或者你想感谢谁？" maxlength="500"></textarea>
+              <div class="char-count"><span id="gratefulCount">0</span> / 500</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">完成度</label>
+              <div class="progress-bar">
+                <div class="progress-fill" id="formProgress" style="width: 0%"></div>
+              </div>
+              <div class="form-hint" id="formProgressHint">填写更多内容来提升完成度</div>
+            </div>
+            <hr class="form-divider" />
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" data-action="reset-form">清空</button>
+              <button type="button" class="btn btn-primary" data-action="save-entry" id="saveBtn">保存日志</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="page" id="page-history">
+        <div style="padding-top:24px">
+          <div class="section-head">
+            <h2 class="section-title">历史记录</h2>
+          </div>
+          <div class="history-toolbar">
+            <div class="search-box">
+              <span class="search-box-icon">🔍</span>
+              <input type="text" id="searchInput" placeholder="搜索日志内容..." />
+            </div>
+            <div class="filter-group" id="filterGroup">
+              <button class="filter-btn active" data-filter="all">全部</button>
+              <button class="filter-btn" data-filter="happy">快乐</button>
+              <button class="filter-btn" data-filter="fulfilling">充实</button>
+              <button class="filter-btn" data-filter="improve">改进</button>
+              <button class="filter-btn" data-filter="reflect">反思</button>
+            </div>
+          </div>
+          <div class="entries-list" id="historyEntries"></div>
+          <div class="pagination" id="historyPagination"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-detail">
+        <div class="detail-container">
+          <button class="detail-back" data-action="go-back">← 返回</button>
+          <h1 class="detail-date" id="detailDate"></h1>
+          <p class="detail-weekday" id="detailWeekday"></p>
+          <div id="detailContent"></div>
+          <div class="detail-actions" id="detailActions"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-archive">
+        <div style="padding-top:24px">
+          <div class="section-head">
+            <h2 class="section-title">归档日志</h2>
+            <span style="font-size:12.5px;color:var(--text-tertiary)" id="archiveCount"></span>
+          </div>
+          <div class="entries-list" id="archiveEntries"></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-export">
+        <div class="export-container">
+          <div class="write-header">
+            <h1 class="write-title">备份与导出</h1>
+            <p class="write-subtitle">将你的成长记录保存到本地</p>
+          </div>
+          <div class="export-section">
+            <h3 class="export-title">导出 CSV 文件</h3>
+            <p class="export-desc">导出为 CSV 格式，可用 Excel、WPS 等软件打开编辑。兼容原有数据格式。</p>
+            <button class="btn btn-primary btn-sm" data-action="export-csv">下载 CSV</button>
+          </div>
+          <div class="export-section">
+            <h3 class="export-title">导出为 PDF</h3>
+            <p class="export-desc">利用浏览器打印功能生成 PDF。切换到历史页面，按 Ctrl+P 选择"另存为 PDF"。</p>
+            <button class="btn btn-secondary btn-sm" data-action="navigate" data-page="history">前往历史页面</button>
+          </div>
+          <div class="export-section">
+            <h3 class="export-title">导入 CSV 数据</h3>
+            <p class="export-desc">从 CSV 文件导入日志数据，会与现有数据合并（不会覆盖）。</p>
+            <input type="file" id="importFile" accept=".csv" style="display:none" />
+            <button class="btn btn-secondary btn-sm" data-action="import-csv">选择文件</button>
+          </div>
+          <div class="export-section">
+            <h3 class="export-title">数据统计</h3>
+            <p class="export-desc" id="exportStats"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">成长日志</div>
+        <div class="footer-links">
+          <a href="#" data-action="navigate" data-page="dashboard">概览</a>
+          <a href="#" data-action="navigate" data-page="write">写日志</a>
+          <a href="#" data-action="navigate" data-page="history">历史</a>
+          <a href="#" data-action="navigate" data-page="archive">归档</a>
+        </div>
+        <p class="footer-copy">Keep growing, day by day.</p>
+      </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <p class="modal-text" id="modalText"></p>
+        <div class="modal-actions" id="modalActions"></div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
